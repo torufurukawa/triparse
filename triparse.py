@@ -1,14 +1,19 @@
 """Parse PDF that contains triathlon race result"""
 
 import sys
-from io import StringIO
-from PyPDF2 import PdfFileReader
+import codecs
 
 
 def main():
-    reader = PdfFileReader(open(sys.argv[1], 'rb'))
-    page_count = reader.getNumPages()
-    page = reader.getPage(0)
+    # TODO: use argparse
+    fin = open(sys.argv[1], encoding='utf8')
+    for line in fin:
+        print(line.strip())
+
+    # TODO: parse
+    # TODO: print
+    pass
+    # TODO: analyze and visualize
 
 
 if __name__ == '__main__':
