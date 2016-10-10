@@ -11,6 +11,7 @@ def main():
     fin = open(sys.argv[1], encoding='utf8')
     for line in fin:
 
+        # TODO: make parser plaggable
         # TODO: fix style
         pattern = r'\d+ (\d+).*?\d:\d{2}:\d{2} (\d:\d{2}:\d{2}) \d+ (\d:\d{2}:\d{2}) \d+ \d:\d{2}:\d{2} \d+ (\d:\d{2}:\d{2}) \d+(\S+)'
         m = re.match(pattern, line)
@@ -24,6 +25,8 @@ def main():
 
         print(aid, swim_lap, bike_lap, run_lap, div)
 
+    # TODO: automate test
+    # TODO: define data structure to represent athlete activity
     # TODO: analyze and visualize
 
 
