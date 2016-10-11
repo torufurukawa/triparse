@@ -7,6 +7,7 @@ from datetime import timedelta
 
 
 def main():
+    race = Race()
     # TODO: use argparse
     fin = open(sys.argv[1], encoding='utf8')
     for line in fin:
@@ -23,11 +24,34 @@ def main():
         bike_lap = parse_lap(bike_str)
         run_lap = parse_lap(run_str)
 
-        print(aid, swim_lap, bike_lap, run_lap, div)
+        result = Result(aid, swim_lap, bike_lap, run_lap, div)
+        print(result)
+        race.add_result(result)
 
+    print(len(race.results))
     # TODO: automate test
-    # TODO: define data structure to represent athlete activity
     # TODO: analyze and visualize
+
+
+class Race:
+    def __init__(self):
+        self.results = {}
+
+    def add_result(self, result):
+        self.results[result.id] = result
+
+
+class Result:
+    def __init__(self, id_, swim_lap, bike_lap, run_lap, division):
+        self.id = id_
+        self.swim_lap = swim_lap
+        self.bike_lap = bike_lap
+        self.run_lap = run_lap
+        # TODO: make division enum
+        self.division = division
+
+    def __str__(self):
+        return '<Result id={}>'.format(self.id)
 
 
 def parse_lap(lap_str):
