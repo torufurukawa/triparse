@@ -5,6 +5,9 @@ import re
 import codecs
 from datetime import timedelta
 
+import numpy
+from matplotlib import pyplot
+
 
 def main():
     race = Race()
@@ -30,7 +33,12 @@ def main():
 
     print(len(race.results))
     # TODO: automate test
-    # TODO: analyze and visualize
+
+    # TODO:WIP analyze and visualize
+    x = numpy.arange(-3, 3, 0.1)
+    y = numpy.sin(x)
+    pyplot.plot(x, y)
+    pyplot.show()
 
 
 class Race:
