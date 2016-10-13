@@ -6,6 +6,8 @@ import codecs
 from datetime import timedelta
 
 import numpy
+import matplotlib
+matplotlib.rcParams['backend'] = 'TkAgg'
 from matplotlib import pyplot
 
 
@@ -34,11 +36,18 @@ def main():
     print(len(race.results))
     # TODO: automate test
 
-    # TODO:WIP analyze and visualize
-    x = numpy.arange(-3, 3, 0.1)
-    y = numpy.sin(x)
-    pyplot.plot(x, y)
+    # Analyze
+    swim_laps = [r.swim_lap.total_seconds() for r in race.results.values()]
+    bin_count = 50
+    n, bins, patches = pyplot.hist(swim_laps, bin_count, cumulative=True, normed=1)
+    print(n, bins, patches)
+
+    # TODO: draw line on MY time
+    pyplot.axvline(sum(swim_laps)/len(swim_laps), color='red', linestyle='dashed', linewidth=2)
+
     pyplot.show()
+
+    # TODO: bike, run and total
 
 
 class Race:
