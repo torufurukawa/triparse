@@ -14,23 +14,8 @@ from matplotlib import pyplot
 def main():
     race = Race()
     # TODO: use argparse
-    fin = open(sys.argv[1], encoding='utf8')
-    for line in fin:
-
-        # TODO: make parser plaggable
-        # TODO: fix style
-        pattern = r'\d+ (\d+).*?\d:\d{2}:\d{2} (\d:\d{2}:\d{2}) \d+ (\d:\d{2}:\d{2}) \d+ \d:\d{2}:\d{2} \d+ (\d:\d{2}:\d{2}) \d+(\S+)'
-        m = re.match(pattern, line)
-        if m is None:
-            continue
-        aid, swim_str, bike_str, run_str, div = m.groups()
-
-        swim_lap = parse_lap(swim_str)
-        bike_lap = parse_lap(bike_str)
-        run_lap = parse_lap(run_str)
-
-        result = Result(aid, swim_lap, bike_lap, run_lap, div)
-        print(result)
+    # TODO: receive athelete id
+    for result in result_reader(open(sys.argv[1], encoding='utf8')):
         race.add_result(result)
 
     print(len(race.results))
@@ -41,6 +26,8 @@ def main():
     bin_count = 50
     n, bins, patches = pyplot.hist(swim_laps, bin_count, cumulative=True, normed=1)
     print(n, bins, patches)
+
+    # TODO: format time on X axis
 
     # TODO: draw line on MY time
     pyplot.axvline(sum(swim_laps)/len(swim_laps), color='red', linestyle='dashed', linewidth=2)
@@ -69,6 +56,26 @@ class Result:
 
     def __str__(self):
         return '<Result id={}>'.format(self.id)
+
+
+def result_reader(textfile):
+    for line in textfile:
+
+        # TODO: make parser plaggable
+        # TODO: fix style
+        pattern = r'\d+ (\d+).*?\d:\d{2}:\d{2} (\d:\d{2}:\d{2}) \d+ (\d:\d{2}:\d{2}) \d+ \d:\d{2}:\d{2} \d+ (\d:\d{2}:\d{2}) \d+(\S+)'
+        m = re.match(pattern, line)
+        if m is None:
+            continue
+        aid, swim_str, bike_str, run_str, div = m.groups()
+
+        swim_lap = parse_lap(swim_str)
+        bike_lap = parse_lap(bike_str)
+        run_lap = parse_lap(run_str)
+
+        result = Result(aid, swim_lap, bike_lap, run_lap, div)
+
+        yield result
 
 
 def parse_lap(lap_str):
