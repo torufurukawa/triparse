@@ -4,6 +4,7 @@ import sys
 import re
 import codecs
 from datetime import timedelta
+import argparse
 
 import numpy
 import matplotlib
@@ -12,8 +13,11 @@ from matplotlib import pyplot
 
 
 def main():
-    race = Race()
     # TODO: use argparse
+    parser = argparse.ArgumentParser()
+    parser.parse_args()
+
+    race = Race()
     # TODO: receive athelete id
     for result in result_reader(open(sys.argv[1], encoding='utf8')):
         race.add_result(result)
@@ -59,6 +63,10 @@ class Result:
 
 
 def result_reader(textfile):
+    """Iterate over results
+
+    textfile is sequence of single line texts that contain athete results
+    """
     for line in textfile:
 
         # TODO: make parser plaggable
