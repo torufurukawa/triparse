@@ -13,13 +13,13 @@ from matplotlib import pyplot
 
 
 def main():
-    # TODO: use argparse
     parser = argparse.ArgumentParser()
-    parser.parse_args()
+    parser.add_argument('filepath', help='path to result file')
+    args = parser.parse_args()
 
     race = Race()
     # TODO: receive athelete id
-    for result in result_reader(open(sys.argv[1], encoding='utf8')):
+    for result in result_reader(open(args.filepath, encoding='utf8')):
         race.add_result(result)
 
     print(len(race.results))
