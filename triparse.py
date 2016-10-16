@@ -13,32 +13,28 @@ from matplotlib import pyplot
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('filepath', help='path to result file')
-    args = parser.parse_args()
-
-    race = Race()
-    # TODO: receive athelete id
-    for result in result_reader(open(args.filepath, encoding='utf8')):
-        race.add_result(result)
+    args = get_args()
+    race = build_race_results(open(args.filepath, encoding='utf8'))
 
     print(len(race.results))
+    # TODO: add logging
     # TODO: automate test
 
     # Analyze
     swim_laps = [r.swim_lap.total_seconds() for r in race.results.values()]
+    # TODO: parametrize bin count
     bin_count = 50
     n, bins, patches = pyplot.hist(swim_laps, bin_count, cumulative=True, normed=1)
-    print(n, bins, patches)
 
     # TODO: format time on X axis
 
-    # TODO: draw line on MY time
-    pyplot.axvline(sum(swim_laps)/len(swim_laps), color='red', linestyle='dashed', linewidth=2)
+    ref_result = race.get_result(args.aid)
+    pyplot.axvline(ref_result.swim_lap.total_seconds(), color='red', linestyle='dashed', linewidth=2)
 
     pyplot.show()
 
     # TODO: bike, run and total
+    # TODO: stat within division
 
 
 class Race:
@@ -47,6 +43,9 @@ class Race:
 
     def add_result(self, result):
         self.results[result.id] = result
+
+    def get_result(self, aid):
+        return self.results.get(aid)
 
 
 class Result:
@@ -60,6 +59,21 @@ class Result:
 
     def __str__(self):
         return '<Result id={}>'.format(self.id)
+
+
+def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('filepath', help='Path to result file')
+    parser.add_argument('aid', help='Athelete ID')
+    result = parser.parse_args()
+    return result
+
+
+def build_race_results(textfile):
+    race = Race()
+    for result in result_reader(textfile):
+        race.add_result(result)
+    return race
 
 
 def result_reader(textfile):
