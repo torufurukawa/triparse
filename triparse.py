@@ -12,7 +12,7 @@ matplotlib.rcParams['backend'] = 'TkAgg'
 from matplotlib import pyplot
 
 # TODO: parametrize bin count
-BIN_COUNT = 50
+BIN_COUNT = 20
 
 # TODO: add logging
 # TODO: automate test
@@ -22,15 +22,6 @@ def main():
     args = get_args()
     race = build_race_results(open(args.filepath, encoding='utf8'))
     plot_histograms(race, args.aid)
-    return
-
-    # Analyze
-
-
-    # TODO: format time on X axis
-    # TODO: format Y axis as %
-    # TODO: run and total
-    # TODO: stat within division
 
 
 class Race:
@@ -73,25 +64,30 @@ def build_race_results(textfile):
 
 
 def plot_histograms(race, aid):
-    # TODO: refactor plotting
-    # Swim overall
     bin_count = BIN_COUNT
-    pyplot.subplot(2, 1, 1)
-    swim_laps = [r.swim_lap.total_seconds() for r in race.results.values()]
-    pyplot.hist(swim_laps, bin_count, cumulative=True, normed=1)
     ref_result = race.get_result(aid)
-    pyplot.axvline(ref_result.swim_lap.total_seconds(), color='red', linestyle='dashed', linewidth=2)
-    # TODO: draw horizontal line
 
-    # Bike overall
-    pyplot.subplot(2, 1, 2)
-    bike_laps = [r.bike_lap.total_seconds() for r in race.results.values()]
-    pyplot.hist(bike_laps, bin_count, cumulative=True, normed=1)
-    ref_result = race.get_result(aid)
-    pyplot.axvline(ref_result.bike_lap.total_seconds(), color='red', linestyle='dashed', linewidth=2)
+    for i, attr in enumerate(['swim_lap', 'bike_lap', 'run_lap']):
+        pyplot.subplot(2, 2, i+1)
+        times = [getattr(r, attr).total_seconds() for r in race.results.values()]
+        ref_time = getattr(ref_result, attr).total_seconds()
+        plot_histogram(times, bin_count, ref_time)
 
     #pyplot.savefig('swim.png')
     pyplot.show()
+
+    # TODO: run and total
+    # TODO: stat within division
+
+
+def plot_histogram(times, bin_count, ref_time):
+    pyplot.hist(times, bin_count, cumulative=True, normed=1)
+    pyplot.axvline(ref_time, color='red', linestyle='dashed', linewidth=2)
+    # TODO: format time on X axis
+    # TODO: format Y axis as %
+    # TODO: draw horizontal line
+    # TODO: render figure title
+    # TODO: align x and y max
 
 
 def result_reader(textfile):
