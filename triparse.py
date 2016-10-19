@@ -10,13 +10,14 @@ import numpy
 import matplotlib
 matplotlib.rcParams['backend'] = 'TkAgg'
 from matplotlib import pyplot
+from matplotlib import ticker
+
 
 # TODO: parametrize bin count
 BIN_COUNT = 20
 
 # TODO: add logging
 # TODO: automate test
-
 
 def main():
     args = get_args()
@@ -47,6 +48,10 @@ class Result:
     def __str__(self):
         return '<Result id={}>'.format(self.id)
 
+    @property
+    def total(self):
+        return self.swim_lap + self.bike_lap + self.run_lap
+
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -67,27 +72,38 @@ def plot_histograms(race, aid):
     bin_count = BIN_COUNT
     ref_result = race.get_result(aid)
 
-    for i, attr in enumerate(['swim_lap', 'bike_lap', 'run_lap']):
-        pyplot.subplot(2, 2, i+1)
+    attrs = ['swim_lap', 'bike_lap', 'run_lap', 'total']
+    labels = ['Swim', 'Bike', 'Run', 'Total']
+
+    for i, (attr, label) in enumerate(zip(attrs, labels)):
         times = [getattr(r, attr).total_seconds() for r in race.results.values()]
         ref_time = getattr(ref_result, attr).total_seconds()
+
+        axes = pyplot.subplot(2, 2, i+1)
         plot_histogram(times, bin_count, ref_time)
+
+        axes.set_title(label)
+        axes.set_ylim(0, 1)
+        axes.yaxis.set_ticks([0.2, 0.4, 0.6, 0.8, 1.0])
+        axes.yaxis.grid(True)
+        # TODO: fix style
+        axes.yaxis.set_major_formatter(ticker.FuncFormatter(lambda v,_: '%d%%'%(v*100)))
+
+        # TODO: format time on X axis
+        # TODO: align x max
+        # TODO: highlight refernece bin
+        #       http://qiita.com/supersaiakujin/items/be4a78809e7278c065e6
+
 
     #pyplot.savefig('swim.png')
     pyplot.show()
 
-    # TODO: run and total
     # TODO: stat within division
 
 
 def plot_histogram(times, bin_count, ref_time):
     pyplot.hist(times, bin_count, cumulative=True, normed=1)
     pyplot.axvline(ref_time, color='red', linestyle='dashed', linewidth=2)
-    # TODO: format time on X axis
-    # TODO: format Y axis as %
-    # TODO: draw horizontal line
-    # TODO: render figure title
-    # TODO: align x and y max
 
 
 def result_reader(textfile):
