@@ -80,17 +80,24 @@ def plot_histograms(race, aid):
         ref_time = getattr(ref_result, attr).total_seconds()
 
         axes = pyplot.subplot(2, 2, i+1)
-        plot_histogram(times, bin_count, ref_time)
-
+        n, bins, patches = pyplot.hist(times, bin_count,
+                                       cumulative=True, normed=1)
+        pyplot.axvline(ref_time, color='red', linestyle='dashed', linewidth=2)
         axes.set_title(label)
+
+        # Y Axis
         axes.set_ylim(0, 1)
         axes.yaxis.set_ticks([0.2, 0.4, 0.6, 0.8, 1.0])
         axes.yaxis.grid(True)
-        # TODO: fix style
-        axes.yaxis.set_major_formatter(ticker.FuncFormatter(lambda v,_: '%d%%'%(v*100)))
+        yformatter = ticker.FuncFormatter(lambda v,_: '%d%%'%(v*100))
+        axes.yaxis.set_major_formatter(yformatter)
 
-        # TODO: format time on X axis
-        # TODO: align x max
+        # X Axis
+        axes.xaxis.set_ticks([bins[0], bins[-1]])
+        xformatter =\
+            ticker.FuncFormatter(lambda v,_: str(timedelta(seconds=v)))
+        axes.xaxis.set_major_formatter(xformatter)
+
         # TODO: highlight refernece bin
         #       http://qiita.com/supersaiakujin/items/be4a78809e7278c065e6
 
@@ -99,11 +106,6 @@ def plot_histograms(race, aid):
     pyplot.show()
 
     # TODO: stat within division
-
-
-def plot_histogram(times, bin_count, ref_time):
-    pyplot.hist(times, bin_count, cumulative=True, normed=1)
-    pyplot.axvline(ref_time, color='red', linestyle='dashed', linewidth=2)
 
 
 def result_reader(textfile):
