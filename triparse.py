@@ -1,5 +1,11 @@
 """Parse PDF that contains triathlon race result"""
 
+# TODO: make this CLI tool
+# import <race> <file> <format>
+# find <race> <aid>
+# list
+
+
 import sys
 import re
 import codecs
@@ -20,6 +26,7 @@ logging.basicConfig(level='INFO')
 
 # TODO: automate test
 # TODO: better user experience
+
 
 def main():
     args = get_args()
