@@ -101,8 +101,8 @@ def plot_histograms(race, aid):
         # TODO: highlight refernece bin
         #       http://qiita.com/supersaiakujin/items/be4a78809e7278c065e6
 
-
-    #pyplot.savefig('swim.png')
+    # TODO:make output filename configurable
+    #pyplot.savefig('test.png')
     pyplot.show()
 
     # TODO: stat within division
