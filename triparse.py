@@ -5,6 +5,7 @@ import re
 import codecs
 from datetime import timedelta
 import argparse
+import logging
 
 import numpy
 import matplotlib
@@ -15,12 +16,14 @@ from matplotlib import ticker
 
 # TODO: parametrize bin count
 BIN_COUNT = 20
+logging.basicConfig(level='INFO')
 
-# TODO: add logging
 # TODO: automate test
+# TODO: better user experience
 
 def main():
     args = get_args()
+    logging.info(args)
     race = build_race_results(open(args.filepath, encoding='utf8'))
     plot_histograms(race, args.aid)
 
