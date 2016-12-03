@@ -1,17 +1,16 @@
 # triparse
 
+## Requirement
 
-## Prerequisite
+- Node 6.9.1
+- npm 3.10.8
 
-- Python 3.5.1+
-- pip 8.1.2
+## Setup
 
-For development,
-
-- GNU Make 3.81
+npm install
 
 ## Test
 
 ```
-make test
+npm run tests
 ```
