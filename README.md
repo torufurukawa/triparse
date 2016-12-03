@@ -9,10 +9,11 @@
 
 ```
 npm install
-```
-
-## Test
-
-```
 npm run tests
+```
+
+## Usage
+
+```
+npm run main -- <result_file> <parser_name>
 ```
