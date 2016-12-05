@@ -1,6 +1,8 @@
 var gulp = require('gulp');
 var typescript = require('gulp-typescript');
 var exec = require('child_process').exec;
+var argv = require('minimist')(process.argv.slice(2));
+console.log(argv);
 
 gulp.task('build', function() {
   var options = {out: 'main.js'};
