@@ -1,4 +1,5 @@
 console.log("Hello world!");
+console.log(process.argv);
 
 // """Parse PDF that contains triathlon race result"""
 //
