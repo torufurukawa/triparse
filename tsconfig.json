@@ -1,0 +1,8 @@
+{
+    "files": ["main.ts"],
+    "filesGlob": ["*.ts"],
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "target": "es6"
+    }
+}
